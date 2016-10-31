@@ -1,5 +1,5 @@
+#include <sstream>
 #include "linearmodel.h"
-
 
 // get the core number of system
 int GetCoreNum()
@@ -133,6 +133,17 @@ bool linear_model::CClassifier::__LoadParam(const string &rConfigPath, classifie
         return false;
     }
     iClassifierParam.m_sWordSegPath = pWordSegNode->FirstChild()->Value();
+
+    TiXmlElement *pFeatNode = pWordSegNode->NextSiblingElement();
+    if (pFeatNode == NULL)
+    {
+        LOG(FATAL) << "feat id is not set" << endl;
+        return false;
+    }
+    string featStr = pWordSegNode->FirstChild()->Value();
+    stringstream sstr;
+    sstr << featStr;
+    sstr >> m_nFeatID;
 
     LOG(INFO) << "Load Config file succeed" << endl;
     return true;
@@ -292,7 +303,7 @@ bool linear_model::CClassifier::__Document2Feature(pstWeibo pDoc)
         LOG(WARNING) << "__Document2Feature Failed WordSeg Failed when extract feature" << endl;
         return false;
     }
-    if (!IFeatureEngine::FeatExtractByWords(vWords, pDoc, sErInfo))
+    if (!IFeatureEngine::FeatExtractByController(m_nFeatID, vWords, pDoc, sErInfo))
     {
         LOG(WARNING) << "__Document2Feature Failed feat extract by words Failed " << sErInfo << endl;
         return false;

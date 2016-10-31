@@ -86,3 +86,18 @@
 
 		return;
 	}
+
+
+    bool basic_tools::StartWith(const string &rStr, const string &rPattern)
+    {
+        if (rStr.length() == 0)
+            return false;
+        int nLen = rPattern.length();
+        if (nLen > rStr.length())
+            return false;
+        string sPrefix = rStr.substr(0, nLen);
+        if (sPrefix == rPattern)
+            return true;
+        else
+            return false;
+    }

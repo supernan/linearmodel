@@ -4,4 +4,5 @@
     <stopwords>../data/testmodel/weibo.stopwords</stopwords>
     <label>../data/testmodel/linear.model.label2id</label>
     <wordseg>../../wordseg/conf</wordseg>
+    <featid>0</featid>
 </linearmodel>
