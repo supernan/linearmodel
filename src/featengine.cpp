@@ -100,13 +100,37 @@ bool IFeatureEngine::__FeatExtractByTimeKey(const vector<string> &vWords, pstWei
         }
         if (bRemove)
             continue;
-
         if (IFeatureEngine::sm_StopWords.find(sWord) == sm_StopWords.end())
         {
             mWordTf[sWord] += 1;
         }
     }
 
+    if (mWordTf.empty())
+    {
+        sErInfo = "mWordTf is empty";
+        return false;
+    }
+    vector<Word> vWordFeats;
+    string sSrc, sKeyVec;
+    map<string, int>::iterator it;
+    for (it = mWordTf.begin(); it != mWordTf.end(); ++it)
+    {
+        sstr.clear();
+        Word iTempWord;
+		iTempWord.m_sWord = it->first;
+	    iTempWord.m_fTf = it->second;
+        sstr << it->second;
+		vWordFeats.push_back(iTempWord);
+		sKeyVec += "(" + it->first + ")" + "[" + sstr.str() + "];";
+		for(int i = 0; i < it->second; ++i)
+			sSrc += it->first + " ";
+    }
+
+    //pDoc->source = sSrc;
+    pDoc->keywords = vWordFeats;
+    pDoc->keyvect = sKeyVec;
+    return true;
     return true;
 }
 

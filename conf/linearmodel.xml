@@ -1,8 +1,8 @@
 <linearmodel>
     <model>../data/testmodel/linear.model</model>
-    <wordspace>../data/testmodel/linear.model.wordspace</wordspace>
+    <wordspace>../data/testmodel/wordSpace.bk2</wordspace>
     <stopwords>../data/testmodel/weibo.stopwords</stopwords>
     <label>../data/testmodel/linear.model.label2id</label>
     <wordseg>../../wordseg/conf</wordseg>
-    <featid>0</featid>
+    <featid>1</featid>
 </linearmodel>

@@ -140,10 +140,11 @@ bool linear_model::CClassifier::__LoadParam(const string &rConfigPath, classifie
         LOG(FATAL) << "feat id is not set" << endl;
         return false;
     }
-    string featStr = pWordSegNode->FirstChild()->Value();
+    string featStr = pFeatNode->FirstChild()->Value();
     stringstream sstr;
     sstr << featStr;
     sstr >> m_nFeatID;
+    cout<<"featid " <<featStr<<" "<< m_nFeatID<<endl;
 
     LOG(INFO) << "Load Config file succeed" << endl;
     return true;
@@ -152,11 +153,12 @@ bool linear_model::CClassifier::__LoadParam(const string &rConfigPath, classifie
 
 bool linear_model::CClassifier::__InitWordsSpace(const string &rWordsPath)
 {
-     if ((access(rWordsPath.c_str(), F_OK)) == -1)
-     {
-         LOG(FATAL) << "__InitWordsSpace Failed file does not exit " << rWordsPath <<endl;
-         return false;
-     }
+    if ((access(rWordsPath.c_str(), F_OK)) == -1)
+    {
+        LOG(FATAL) << "__InitWordsSpace Failed file does not exit " << rWordsPath <<endl;
+        return false;
+    }
+
     ifstream iInput(rWordsPath.c_str());
     string sWord;
     int nIdx;
@@ -165,6 +167,11 @@ bool linear_model::CClassifier::__InitWordsSpace(const string &rWordsPath)
         m_mWordsSpace[sWord] = nIdx;
     }
     iInput.close();
+    if (m_mWordsSpace.empty())
+    {
+        LOG(FATAL)<<"__InitWordsSpace Failed wordSpace is empty!" << endl;
+        return false;
+    }
     LOG(INFO) << "WordsSpace init succeed" << endl;
     return true;
 }
