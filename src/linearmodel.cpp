@@ -269,20 +269,20 @@ bool linear_model::CClassifier::__WordSegment(pstWeibo pDoc, vector<string> &vWo
 {
     if (pDoc == NULL)
     {
-        LOG(WARNING) << "Doc is NULL when WordSeg" << endl;
+        DLOG(WARNING) << "Doc is NULL when WordSeg" << endl;
         return false;
     }
     int nLen = pDoc->source.size();
     if (nLen == 0)
     {
-        LOG(WARNING) << "Len of Doc is 0" << endl;
+        DLOG(WARNING) << "Len of Doc is 0" << endl;
         return true;
     }
 
     char *pRes = new char[nLen * 10];
     if (pRes == NULL)
     {
-        LOG(FATAL) << "Memory allocate Failed when WordSeg" << endl;
+        DLOG(FATAL) << "Memory allocate Failed when WordSeg" << endl;
         return false;
     }
     WordSegmentStr(m_wordSegApi, pDoc->source.c_str(), vWords);
@@ -296,17 +296,17 @@ bool linear_model::CClassifier::__Document2Feature(pstWeibo pDoc)
     string sErInfo = "";
     if (pDoc == NULL)
     {
-        LOG(WARNING) << "__Document2Feature Failed Doc is NULL when extract feature" << endl;
+        DLOG(WARNING) << "__Document2Feature Failed Doc is NULL when extract feature" << endl;
         return false;
     }
     if (!__WordSegment(pDoc, vWords))
     {
-        LOG(WARNING) << "__Document2Feature Failed WordSeg Failed when extract feature" << endl;
+        DLOG(WARNING) << "__Document2Feature Failed WordSeg Failed when extract feature" << endl;
         return false;
     }
     if (!IFeatureEngine::FeatExtractByController(m_nFeatID, vWords, pDoc, sErInfo))
     {
-        LOG(WARNING) << "__Document2Feature Failed feat extract by words Failed " << sErInfo << endl;
+        DLOG(WARNING) << "__Document2Feature Failed feat extract by words Failed " << sErInfo << endl;
         return false;
     }
     return true;
@@ -317,7 +317,7 @@ bool linear_model::CClassifier::__PredictByModel(vector<feature_node> vFeatures,
 {
     if (vFeatures.empty())
     {
-        LOG(WARNING) << "__PredictByModel Features is empty" << endl;
+        DLOG(WARNING) << "__PredictByModel Features is empty" << endl;
         return false;
     }
 	sort(vFeatures.begin(), vFeatures.end(), IsGreater);
@@ -330,7 +330,7 @@ bool linear_model::CClassifier::__PredictByModel(vector<feature_node> vFeatures,
 	double *pRes = new double[m_vLabels.size()];
     if (pFeatures == NULL || pRes == NULL)
     {
-        LOG(WARNING) << "__PredictByModel Memory allocate error when predict" << endl;
+        DLOG(WARNING) << "__PredictByModel Memory allocate error when predict" << endl;
         return false;
     }
 	memset(pRes, 0, sizeof(double) * m_vLabels.size());
@@ -353,13 +353,13 @@ bool linear_model::CClassifier::PredictDocument(pstWeibo pDoc, int &rLabel)
 {
     if (!__Document2Feature(pDoc))
     {
-        LOG(WARNING) << "PredictDocument Doc2Feat Failed " << endl;
+        DLOG(WARNING) << "PredictDocument Doc2Feat Failed " << endl;
         return false;
     }
 	vector<feature_node> vFeatures;
     if (pDoc == NULL)
     {
-        LOG(WARNING) << "PredictDocument Doc is NULL when predict" << endl;
+        DLOG(WARNING) << "PredictDocument Doc is NULL when predict" << endl;
         return false;
     }
 	for(int i = 0; i < pDoc->keywords.size(); ++i)
@@ -375,7 +375,7 @@ bool linear_model::CClassifier::PredictDocument(pstWeibo pDoc, int &rLabel)
 
     if (!__PredictByModel(vFeatures, rLabel))
     {
-        LOG(WARNING) << "PredictDocument PredictByModel failed" << endl;
+        DLOG(WARNING) << "PredictDocument PredictByModel failed" << endl;
         return false;
     }
 
