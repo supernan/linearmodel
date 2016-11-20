@@ -5,6 +5,7 @@
 #include "linearmodel.h"
 //#define FLAGS_log_dir = "../logs"
 using namespace std;
+using namespace linear_model;
 
 int fn_iInitWeiboDataFromFile(const char *dataPath, vector<Weibo> &weibo)
 {
@@ -47,7 +48,7 @@ int main(int argc, char **argv)
     }
     string path = "../conf/linearmodel.xml";
     string name = "model_test";
-    linear_model::CClassifier c(path, name);
+    CClassifier *pC =  new CClassifier(path, name);
     vector<Weibo> text;
     vector<vector<pstWeibo> > res;
     string fpath = argv[1];
@@ -55,7 +56,7 @@ int main(int argc, char **argv)
 	vector<pstWeibo> corpus;
     for (int i = 0; i < text.size(); i++)
         corpus.push_back(&text[i]);
-    if (!c.BatchPredict(corpus, res))
+    if (!pC->BatchPredict(corpus, res))
     {
         cout << "Batch Error" << endl;
         return 1;
@@ -82,5 +83,6 @@ int main(int argc, char **argv)
     for (int i = 0; i < words.size(); i++)
         cout<<words[i]<<endl;
     cout<<endl;*/
+    delete pC;
     return 0;
 }

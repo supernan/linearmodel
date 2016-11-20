@@ -45,7 +45,7 @@ void* linear_model::ClassifyThreadFunc(void *arg)
         int nLaebl = -1;
         if (!hClassifier->PredictDocument((*pDocs)[i], nLaebl))
         {
-            LOG(WARNING) << "ClassifyThreadFunc WARNING Predict Failed in thread function " << endl;
+            DLOG(WARNING) << "ClassifyThreadFunc WARNING Predict Failed in thread function " << endl;
             continue;
         }
         if (nLaebl >= vTempRes.size())
@@ -75,6 +75,7 @@ linear_model::CClassifier::CClassifier(const string &rConfigPath, string sName)
 
 linear_model::CClassifier::~CClassifier()
 {
+    WordSegExit(m_wordSegApi);
     pthread_mutex_destroy(&m_ModelMutex);
 }
 
