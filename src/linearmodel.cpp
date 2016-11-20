@@ -245,7 +245,8 @@ bool linear_model::CClassifier::__InitClassifier(const string &rConfigPath)
         return false;
     if (!__InitStopWords(param.m_sStopWordsPath.c_str()))
         return false;
-	if (!ICTCLAS_Init(param.m_sWordSegPath.c_str()))
+    m_wordSegApi = WordSegInit(param.m_sWordSegPath.c_str());
+	if (m_wordSegApi == NULL)
     {
         LOG(FATAL) << "WordSeg Module is Failed" << endl;
         return false;
@@ -284,14 +285,7 @@ bool linear_model::CClassifier::__WordSegment(pstWeibo pDoc, vector<string> &vWo
         LOG(FATAL) << "Memory allocate Failed when WordSeg" << endl;
         return false;
     }
-    int nRst = 0;
-	nRst = ICTCLAS_ParagraphProcess(pDoc->source.c_str(), nLen, pRes, CODE_TYPE_UNKNOWN, 1);
-    string sRes = pRes;
-    delete[] pRes;
-    pRes = NULL;
-
-    string sDelimit = " ";
-    basic_tools::Split(sRes, sDelimit, vWords);
+    WordSegmentStr(m_wordSegApi, pDoc->source.c_str(), vWords);
     return true;
 }
 
