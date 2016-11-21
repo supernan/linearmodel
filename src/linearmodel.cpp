@@ -77,7 +77,8 @@ linear_model::CClassifier::~CClassifier()
 {
     WordSegExit(m_wordSegApi);
     pthread_mutex_destroy(&m_ModelMutex);
-    delete m_iModel;
+    free_and_destroy_model(&m_iModel);
+    //delete[] m_iModel;
 }
 
 
@@ -149,6 +150,7 @@ bool linear_model::CClassifier::__LoadParam(const string &rConfigPath, classifie
     cout<<"featid " <<featStr<<" "<< m_nFeatID<<endl;
 
     LOG(INFO) << "Load Config file succeed" << endl;
+    delete pDocument;
     return true;
 }
 
@@ -337,7 +339,7 @@ bool linear_model::CClassifier::__PredictByModel(vector<feature_node> vFeatures,
 	double dLabelRes = predict_probability(m_iModel, pFeatures, pRes);
     rLabel = int(dLabelRes);
 
-    delete pFeatures;
+    delete[] pFeatures;
     delete[] pRes;
     pFeatures = NULL;
     pRes = NULL;
