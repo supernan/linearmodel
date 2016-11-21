@@ -77,6 +77,7 @@ linear_model::CClassifier::~CClassifier()
 {
     WordSegExit(m_wordSegApi);
     pthread_mutex_destroy(&m_ModelMutex);
+    delete m_iModel;
 }
 
 
@@ -280,12 +281,7 @@ bool linear_model::CClassifier::__WordSegment(pstWeibo pDoc, vector<string> &vWo
         return true;
     }
 
-    char *pRes = new char[nLen * 10];
-    if (pRes == NULL)
-    {
-        DLOG(FATAL) << "Memory allocate Failed when WordSeg" << endl;
-        return false;
-    }
+    //char *pRes = new char[nLen * 10];
     WordSegmentStr(m_wordSegApi, pDoc->source.c_str(), vWords);
     return true;
 }
