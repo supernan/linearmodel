@@ -338,6 +338,8 @@ bool linear_model::CClassifier::__PredictByModel(vector<feature_node> vFeatures,
 
 	double dLabelRes = predict_probability(m_iModel, pFeatures, pRes);
     rLabel = int(dLabelRes);
+    if (pRes[rLabel-1] < 0.12) //TODO
+        rLabel = -1; // drop the doc
 
     delete[] pFeatures;
     delete[] pRes;
@@ -380,7 +382,7 @@ bool linear_model::CClassifier::PredictDocument(pstWeibo pDoc, int &rLabel)
 
     if (rLabel < 0)
     {
-        LOG(WARNING) << "PredictDocument Predict label is illegal" << endl;
+        LOG(WARNING) << "PredictDocument Predict label is illegal" << " "<<pDoc->source<<endl;
         return false;
     }
     return true;

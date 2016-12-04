@@ -1,8 +1,8 @@
 <linearmodel>
-    <model>../data/testmodel/linear.model</model>
-    <wordspace>../data/testmodel/wordSpace.bk2</wordspace>
+    <model>../data/event_model/tfmgDocs_new.model</model>
+    <wordspace>../data/event_model/wordSpace</wordspace>
     <stopwords>../data/testmodel/weibo.stopwords</stopwords>
-    <label>../data/testmodel/linear.model.label2id</label>
+    <label>../data/event_model/label2id</label>
     <wordseg>../../ws/wordSeg_data/</wordseg>
     <featid>1</featid>
 </linearmodel>
