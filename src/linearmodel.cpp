@@ -48,9 +48,9 @@ void* linear_model::ClassifyThreadFunc(void *arg)
             DLOG(WARNING) << "ClassifyThreadFunc WARNING Predict Failed in thread function " << endl;
             continue;
         }
-        if (nLaebl >= vTempRes.size())
+        if (nLaebl >= int(vTempRes.size()) || nLaebl < 0)
         {
-            LOG(ERROR) << "ClassifyThreadFunc Label is out of boundry" << endl;
+            LOG(ERROR) << "ClassifyThreadFunc Label is out of boundry " << nLaebl<<endl;
             continue;
         }
         vTempRes[nLaebl].push_back((*pDocs)[i]);
@@ -148,6 +148,16 @@ bool linear_model::CClassifier::__LoadParam(const string &rConfigPath, classifie
     sstr << featStr;
     sstr >> m_nFeatID;
     cout<<"featid " <<featStr<<" "<< m_nFeatID<<endl;
+
+    TiXmlElement *pThreshNode = pFeatNode->NextSiblingElement();
+    if (pThreshNode == NULL)
+    {
+        LOG(FATAL) << "threshold is not set" << endl;
+        return false;
+    }
+    sstr.clear();
+    sstr << pThreshNode->FirstChild()->Value();
+    sstr >> m_dThresh;
 
     LOG(INFO) << "Load Config file succeed" << endl;
     delete pDocument;
@@ -338,8 +348,8 @@ bool linear_model::CClassifier::__PredictByModel(vector<feature_node> vFeatures,
 
 	double dLabelRes = predict_probability(m_iModel, pFeatures, pRes);
     rLabel = int(dLabelRes);
-    if (pRes[rLabel-1] < 0.12) //TODO
-        rLabel = -1; // drop the doc
+    if (pRes[rLabel-1] < m_dThresh)
+        rLabel = 0; // drop the doc
 
     delete[] pFeatures;
     delete[] pRes;
@@ -380,7 +390,7 @@ bool linear_model::CClassifier::PredictDocument(pstWeibo pDoc, int &rLabel)
         return false;
     }
 
-    if (rLabel < 0)
+    if (rLabel < 0) //TODO
     {
         LOG(WARNING) << "PredictDocument Predict label is illegal" << " "<<pDoc->source<<endl;
         return false;

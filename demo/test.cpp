@@ -61,16 +61,17 @@ int main(int argc, char **argv)
         cout << "Batch Error" << endl;
         return 1;
     }
-    for (int i = 0; i < res.size(); i++)
+    for (int i = 1; i < res.size(); i++)
     {
-        if (i == 57)
-        {
+        //if (i == 57)
+        //{
             vector<pstWeibo> docs = res[i];
-            for (int i = 0; i < docs.size(); i++)
+            cout<<docs.size()<<endl;
+            for (int j = 0; j < docs.size(); j++)
             {
-                cout<<docs[i]->source<<endl;
+                cout<<docs[j]->source<<endl;
             }
-        }
+        //}
     }
      //   cout<<i<<" "<<res[i].size()<<endl;
 

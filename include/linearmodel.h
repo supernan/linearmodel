@@ -270,6 +270,9 @@ namespace linear_model
             // feature id
             int m_nFeatID;
 
+            // threshold
+            double m_dThresh;
+
 
     };
 }
